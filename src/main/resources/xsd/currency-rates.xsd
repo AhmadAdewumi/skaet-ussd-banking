@@ -1,0 +1,24 @@
+<!--By following the contract first development approach, because requests have to be validated before reaching the code-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://skaet_assessment.com/soap/currency"
+           elementFormDefault="qualified">
+
+    <xs:element name="GetConversionRateRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="fromCurrency" type="xs:string"/>
+                <xs:element name="toCurrency" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="GetConversionRateResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="rate" type="xs:decimal"/>
+                <xs:element name="timestamp" type="xs:string"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
+

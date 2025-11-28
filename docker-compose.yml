@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  skaet-app:
+    build: .
+    container_name: skaet_app
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      skaet-db:
+        condition: service_healthy
+      skaet-redis:
+        condition: service_started
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://skaet-db:3306
+      SPRING_DATA_REDIS_HOST: skaet-redis
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_PHONE_NUMBER: ${TWILIO_PHONE_NUMBER}
+    networks:
+      - skaet-network
+
+  skaet-db:
+    image: mysql:8.0
+    container_name: skaet_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: skaet_ussd
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_USER: skaet_user
+      MYSQL_PASSWORD: skaet_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - skaet-network
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  skaet-redis:
+    image: redis:alpine
+    container_name: skaet_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - skaet-network
+
+networks:
+  skaet-network:
+    driver: bridge
+
+volumes:
+  mysql_data:
