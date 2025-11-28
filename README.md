@@ -9,7 +9,7 @@ This project is a USSD banking application built with Java and Spring Boot. It i
 ## Features and Implementation Status
 
 ### Core Requirements
-- [x] Create Account (Name and PIN)
+- [x] Create Account (Name, Phone Number and PIN)
 - [x] Deposit
 - [x] Withdraw
 - [x] Check Balance
