@@ -11,7 +11,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-//-- Using twilio to send SMS
+//-- Using twilio to send SMS notification
 @Service
 @Slf4j
 public class SmsService {
@@ -25,11 +25,11 @@ public class SmsService {
     @Value("${twilio.phone-number}")
     private String fromNumber;
 
-//    @PostConstruct
+    @PostConstruct
     public void init() {
         //-- We initialize the Twilio SDK at  app startup
         if (accountSid != null && !accountSid.isEmpty()) {
-//            Twilio.init(accountSid, authToken);
+            Twilio.init(accountSid, authToken);
             log.info("Twilio SDK Initialized successfully with Account SID: {}", accountSid);
         } else {
             log.warn("Twilio credentials are not set. SMS sending will fail.");
@@ -42,13 +42,13 @@ public class SmsService {
         log.info("Async Event: Preparing to send SMS to {}...", event.getPhoneNumber());
 
         try {
-//            Message message = Message.creator(
-//                    new PhoneNumber(event.getPhoneNumber()),
-//                    new PhoneNumber(fromNumber),
-//                    event.getMessage()
-//            ).create();
+            Message message = Message.creator(
+                    new PhoneNumber(event.getPhoneNumber()),
+                    new PhoneNumber(fromNumber),
+                    event.getMessage()
+            ).create();
 
-//            log.info("SMS SENT SUCCESSFULLY! SID: {}, Status: {}", message.getSid(), message.getStatus());
+            log.info("SMS SENT SUCCESSFULLY! SID: {}, Status: {}", message.getSid(), message.getStatus());
 
         } catch (Exception e) {
             log.error("SMS FAILED: Could not send to {}. Error: {}", event.getPhoneNumber(), e.getMessage());
